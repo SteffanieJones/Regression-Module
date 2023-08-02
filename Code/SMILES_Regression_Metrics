@@ -39,7 +39,6 @@ This program begins by inputting the SMILES dataset and converting the SMILES to
 
 def smiles_to_fingerprints(data_set, last_column):
     """
-
     Parameters
     ----------
     data_set : input the data csv file containing the SMILES to be converted to fingerprints.
