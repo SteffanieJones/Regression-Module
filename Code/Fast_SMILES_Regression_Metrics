@@ -217,16 +217,14 @@ def gaussian_regression(X, y):
     """
     start_time = time.time()
     
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
-    print("Test train split completed.")
-    
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)    
     kernel = RBF(length_scale = 1.0) 
     
     #Create final optimized Gaussian Process model based on the GridSearchCV results
     gp = GaussianProcessRegressor(kernel = kernel, alpha=0.001, normalize_y=True, random_state=42)
-    print("Gaussian model created")
+
     gp.fit(X_train, y_train)  
-    print("Gaussian model fitted")
+
     #predict Lipophilicity values with the test data set to assess Gaussian Model
     y_pred, std = gp.predict(X_test, return_std = True) 
     
