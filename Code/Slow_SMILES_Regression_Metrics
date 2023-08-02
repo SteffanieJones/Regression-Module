@@ -219,7 +219,6 @@ def gaussian_regression(X, y):
     start_time = time.time()
     
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
-    print("Test train split completed.")
     
     #Find the paramaters that optimize the Gaussian Model using sklearn's GridSearchCV function
     param_grid = {"alpha": [1e-3,1e-2,1e-1,1],
@@ -227,11 +226,10 @@ def gaussian_regression(X, y):
                   "n_restarts_optimizer": [0, 1, 5, 10, 50]}
     gp = GaussianProcessRegressor()
     grid_search = GridSearchCV(gp, param_grid=param_grid,cv=3)
-    print("Grid search initialized")
+    print("Gaussian grid search initialized")
     
     #Fit model using the training data
     grid_search.fit(X_train, y_train)
-    print("Grid search fitted")
     
     #Return a dictionary of the optimal paramater values
     param_dict = grid_search.best_estimator_.get_params()
@@ -243,9 +241,7 @@ def gaussian_regression(X, y):
     #Create final optimized Gaussian Process model based on the GridSearchCV results
     gp = GaussianProcessRegressor(kernel = kernel, alpha=alpha_param, normalize_y=True, random_state=random_state_param, 
                                   n_restarts_optimizer = n_restarts_optimizer_param)
-    print("Gaussian model created")
     gp.fit(X_train, y_train)  
-    print("Gaussian model fitted")
     #predict Lipophilicity values with the test data set to assess Gaussian Model
     y_pred, std = gp.predict(X_test, return_std = True) 
     
