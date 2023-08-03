@@ -1,6 +1,14 @@
 # Regression-Module
 The Regression Module is a Python package that takes inputs of molecular fingerprints or SMILES and outputs the performance of four regression models: Linear Regression, Gaussian Process Regression, Decision Tree Regression, and Random Forest Regression. The models' performance is quantitatively measured through statistics, specifically R^2, MSE, MAE, and R Pearson Correlation Coefficient values. 
 
+# Installation
+TODO
+
+# Organization
+The project is organized into folders:
+- Code contains the various versions of the Regression Metrics code, and is split into subfolders based on the inputs taken.
+- data contains the data used to develop and analyze the model
+
 # Code Versions:
 I created multiple versions of both the fingerprint and SMILES versions of this code to create various run times. For larger data sets, the Regression_Metrics code can take multiple hours to run. Therefore, if a rough estimate is all the user requires, they can use the Fast_Regression_Metrics code in order to gain these results without waiting as long for results.
 
@@ -15,9 +23,6 @@ In this version of the code, more optimized parameters are included, meaning the
 
 **Regression_Metrics_Graphs**
 This version outputs the same statistics but also outputs graphs of each regression model's performance. On the x-axis are the values predicted by the model and on the y-axis are the true values.
-
-# Installation instructions
-TODO
 
 # Datasets used to create model
 
