@@ -1,10 +1,10 @@
 # Regression-Module
 The Regression Module is a Python package that takes inputs of molecular fingerprints or SMILES and outputs the performance of four regression models: Linear Regression, Gaussian Process Regression, Decision Tree Regression, and Random Forest Regression. The models' performance is quantitatively measured through statistics, specifically R^2, MSE, MAE, and R Pearson Correlation Coefficient values. 
 
-# Dependencies
+# Dependencies:
 **scikit-learn**: 1.2.1, py310hd77b12b_0
 - from sklearn.linear_model import LinearRegression
-- from sklearn.gaussian_process import GaussianProcessRegression
+- from sklearn.gaussian_process import GaussianProcessRegressor
 - from sklearn.tree import DecisionTreeRegressor
 - from sklearn.ensemble import RandomForestRegressor
 - from sklearn.gaussian_process.kernels import RBF
@@ -14,17 +14,20 @@ The Regression Module is a Python package that takes inputs of molecular fingerp
 - from sklearn.metrics import mean_squared_error
 - from sklearn.metrics import mean_absolute_error
 
-**pandas**: 1.5.3, py310h4ed8f06_0
-
-**numpy**: 1.23.5, py310h60c9a35_0
-
+**pandas:** 1.5.3, py310h4ed8f06_0
+- import pandas as pd
+  
+**numpy:** 1.23.5, py310h60c9a35_0
+- import numpy as np
+  
 **time**
 
 **datetime**
 
 **sys**
 
-**matplotlib.pyplot as plt**
+**matplotlib:** 3.7.0, py310haa95532_0
+- import matplotlib.pyplot as plt
 
 **rdkit**: 2023.3.2, pypi_0
 - from rdkit import Chem
