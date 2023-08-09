@@ -63,12 +63,12 @@ def txt_to_csv(input_file, output_file):
     """
     Parameters
     ----------
-    input_file : input a txt file (name)
-    output_file : input the name of the output file (likely the txt file's name  + "csv" instead of "txt")
+    input_file: input a txt file (name)
+    output_file: input the name of the output file (likely the txt file's name  + "csv" instead of "txt")
 
     Returns
     -------
-    output_file : returns the txt file as a csv so the program can process it
+    output_file: returns the txt file as a csv so the program can process it
 
     """
     # Read the TXT file using pandas.
@@ -84,8 +84,8 @@ def smiles_to_fingerprints(data_set, last_column):
 
     Parameters
     ----------
-    data_set : input the data csv file containing the SMILES to be converted to fingerprints.
-    last_column : input the name of the data set to separate the expected results from the SMILES
+    data_set: input the data csv file containing the SMILES to be converted to fingerprints.
+    last_column: input the name of the data set to separate the expected results from the SMILES
     that will be converted to fingerprints.
 
     Returns
@@ -216,7 +216,7 @@ def main():
     """
     # determine which path the code should follow depending on the user input given
     if data_type == "1":
-        data_set = input("Input the name of the csv file you would like to use: ")
+        data_set = input("Input the name of the csv or txt file you would like to use: ")
         if ".txt" in data_set:
             output_file = data_set.replace("txt", "csv")
             txt_to_csv(data_set, output_file)
@@ -246,7 +246,7 @@ def main():
         X_data, y_data = smiles_to_fingerprints(changed_data_set, last_column)
     
     elif data_type == "3":
-        data_set = input("Input the name of the csv file you would like to use: ")
+        data_set = input("Input the name of the csv or txt file you would like to use: ")
         print("")
         last_column = input("Input the name of the column with the expected/final data as it appears in the spreadsheet: ")
         print("")
