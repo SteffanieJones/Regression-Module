@@ -29,3 +29,9 @@ This version outputs the same statistics but also outputs graphs of each regress
 **Lipophilicity:** The main dataset used to create this model was a Lipophilicity data set, included in the "Data" folder in this repository. I used both a fingerprint and SMILES version of this dataset to ensure that both versions of the code returned the same results. The Lipophilicity data set had fingerprints of length 1024 and 4200 rows of data.
 
 **PDBBind:** I incorporated the PDBbind dataset to test my model after I developed it. This data set contains fingerprints of length 2048 and 9880 rows of data. This data set, because it was significantly larger, took significantly longer to run. Whereas the Gaussian model took 15 minutes to run for the Lipophilicity dataset, it took 3 hours to run with the PDBbind dataset. However, the model did continue to function properly.
+
+**Contact:**
+Steffanie Jones
+djy6ge@virginia.edu
+joness24@ucfsd.net
+484-719-8805
