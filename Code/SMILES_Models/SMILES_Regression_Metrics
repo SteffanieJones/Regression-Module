@@ -4,7 +4,7 @@ Created on Tue Jul 11 10:05:38 2023
 @author: Steffanie Jones
 """
 #################################### Regression Module Information###################################
-#please input a SMILES data set in the form of a csv file with two columns: the SMILES value and the expected value
+#please input a SMILES data set in the form of a CSV file with two columns: the SMILES value and the expected value
 
 #Returns General Statistics About Four Regression techniques:
     #Linear Regression
