@@ -3,7 +3,7 @@ Created on Tue Jul 11 10:05:38 2023
 @author: Steffanie Jones
 """
 #################################### Regression Module Information###################################
-#please input a SMILES data set in the form of a csv file with two columns: the SMILES value and the expected value
+#please input a SMILES data set in the form of a CSV file with two columns: the SMILES string and the expected value
 
 #Returns General Statistics About Four Regression techniques:
     #Linear Regression
@@ -16,16 +16,18 @@ Created on Tue Jul 11 10:05:38 2023
 ####################################################################################################
 
 from sklearn.linear_model import LinearRegression
+from sklearn.gaussian_process import GaussianProcessRegressor
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor
+
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 from sklearn.metrics import r2_score
 from sklearn.metrics import mean_absolute_error
-import pandas as pd
-from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import RBF
-from sklearn.tree import DecisionTreeRegressor
+
+import pandas as pd
 import numpy as np
-from sklearn.ensemble import RandomForestRegressor
 import time
 import datetime
 from rdkit import Chem
@@ -35,9 +37,9 @@ from rdkit.Chem import AllChem
 This program begins by inputting the SMILES dataset and converting the SMILES to fingerprint datapoints that the program can process.
 """
 
+#convert SMILES string to molecular fingerprint
 def smiles_to_fingerprints(data_set, last_column):
     """
-
     Parameters
     ----------
     data_set : input the data csv file containing the SMILES to be converted to fingerprints.
@@ -52,6 +54,7 @@ def smiles_to_fingerprints(data_set, last_column):
     """
     df = pd.read_csv(data_set, delimiter=",")
 
+    #separate the SMILES dataset for processing
     smiles_dataset = df.drop(last_column, axis=1)
     input_smiles = smiles_dataset["smiles"]
     output_data = df[last_column]
@@ -71,7 +74,7 @@ def smiles_to_fingerprints(data_set, last_column):
 
         else:
             print("Failed to load the molecule from SMILES.")
- 
+    #create a dataframe of all of the fingerprints to be used in the program
     fingerprint_arrays = [list(fp) for fp in fingerprints]
     df = pd.DataFrame(fingerprint_arrays)
  
@@ -81,8 +84,8 @@ def smiles_to_fingerprints(data_set, last_column):
 
 def main():
     """
-    Calls all four regression models, calls the calculate_stats function to return the r2, mse, mae,
-    and r pearson values, prints a final dataframe with a compatilation of stats from all four 
+    Calls all four regression models, calls the calculate_stats function to return the R2, MSE, MAE,
+    and R Pearson values, prints a final dataframe with a compatilation of stats from all four 
     models, prints the times when the program begins and ends.
 
     Returns
@@ -94,12 +97,14 @@ def main():
     This main function begins by transforming the SMILES input to fingerprints that the program can process
     """
     
-    #### 1. read in csv file using pandas- path goes in parentheses
+    #1. read in csv file using pandas; make sure the file is in the same location as the Python interpreter being used
     data_set = input("Input the name of the csv file you would like to use: ")
     last_column = input("Input the name of the column with the expected/final data as it appears in the spreadsheet: ")
-    
+
+    #2. run the function through the smiles_to_fingerprints converter
     X_data, y_data = smiles_to_fingerprints(data_set, last_column)
-    
+
+    #3. run the program as normal with the newly converted fingerprint strands
     current_time = datetime.datetime.now()
     formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
     print(f"This program was started at {formatted_time}")
@@ -151,8 +156,8 @@ def main():
 def calculate_stats(y_test, y_pred):
     """
     Function to calculate general statistics that can be applied to each specific model
-    Notes: r2, mse, and mae calculated through sklearn module
-    r pearson correlation coefficient calculated through numpy module
+    Notes: R2, MSE, and MAE calculated through sklearn module
+    R Pearson correlation coefficient calculated through numpy module
 
     Parameters
     ----------
@@ -161,7 +166,7 @@ def calculate_stats(y_test, y_pred):
 
     Returns
     -------
-    stats : list of r2, mse, mae, and r pearson correlation coefficient values for each specific regression model the function is used for
+    stats : list of R2, MSE, MAE, and R Pearson correlation coefficient values for each specific regression model the function is used for
 
     """
     r2 = r2_score(y_test, y_pred)
@@ -178,11 +183,11 @@ def calculate_stats(y_test, y_pred):
 #random state values are set to 42, unless optimized using GridSearchCV
 def linear_regression(X, y):
     """
-    Implements a linear regression model on the inputted data
+    Implements a Linear Regression model on the inputted data
 
     Returns
     -------
-    stats : a list of four statistics (r2 value, mse value, mae value, and r pearson correlation 
+    stats : a list of four statistics (R2 value, MSE value, MAE value, and R Pearson correlation 
     coefficient value to the main function to be included in the final dataframe)
 
     """
@@ -203,16 +208,16 @@ def linear_regression(X, y):
     return calculate_stats(y_test, y_pred)
     
 ##################################################################################################
-#Gaussian Process Regression Model (Optimized)
+#Gaussian Process Regression Model
 
 def gaussian_regression(X, y):
     """
-    Implements a gaussian regression model with the inputted data
+    Implements a Gaussian Regression model with the inputted data
 
     Returns
     -------
-    stats1 : returns same list as linear regression, except with the values achieved by the 
-    gaussian model
+    stats1 : returns same list as Linear Regression, except with the values achieved by the 
+    Gaussian Model
 
     """
     start_time = time.time()
@@ -220,7 +225,7 @@ def gaussian_regression(X, y):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)    
     kernel = RBF(length_scale = 1.0) 
     
-    #Create final optimized Gaussian Process model based on the GridSearchCV results
+    #Create final optimized Gaussian Process model 
     gp = GaussianProcessRegressor(kernel = kernel, alpha=0.001, normalize_y=True, random_state=42)
 
     gp.fit(X_train, y_train)  
@@ -236,15 +241,15 @@ def gaussian_regression(X, y):
     #Calculate Gaussian Statistics
     return calculate_stats(y_test, y_pred)
 #################################################################################################
-#Decision Tree Model (Optimized)
+#Decision Tree Model
 
 def decision_tree_regression(X, y):
     """
-    Implements a decision tree regression model with the inputted data
+    Implements a Decision Tree regression model with the inputted data
 
     Returns
     -------
-    stats2 : list of statistics specific to the decision tree model's performance
+    stats2 : list of statistics specific to the Decision Tree model's performance
 
     """
     
@@ -257,7 +262,7 @@ def decision_tree_regression(X, y):
     tree1 = DecisionTreeRegressor()
     tree1.fit(X_train,y_train)
     
-    #Using the optimized model, predict values from the X test set
+    #Using the model, predict values from the X test set
     y_pred=tree1.predict(X_test)
     
     end_time = time.time()
@@ -269,7 +274,7 @@ def decision_tree_regression(X, y):
     #Calculate Decision Tree Stats
     return calculate_stats(y_test, y_pred)
 #################################################################################################
-#Random Forest Regression Model (Optimized)
+#Random Forest Regression Model 
 
 def random_forest_regression(X, y):
     """
@@ -286,11 +291,11 @@ def random_forest_regression(X, y):
     #Split the data into a training set and a test set
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 5)
     
-    #Code the final Random Forest model with the optimized paramaters from the GridSearchCV function
+    #Code the final Random Forest model 
     forest = RandomForestRegressor(n_estimators = 500, min_samples_leaf = 1, random_state = 5, ccp_alpha = 0.001)
     forest.fit(X_train, y_train)
     
-    #Predict test set data with optimized paramaters
+    #Predict test set data
     y_pred = forest.predict(X_test) 
     
     end_time = time.time()
