@@ -18,17 +18,19 @@ Created on Tue Jul 11 10:05:38 2023
 ####################################################################################################
 
 from sklearn.linear_model import LinearRegression
+from sklearn.gaussian_process import GaussianProcessRegressor
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor
+
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 from sklearn.metrics import r2_score
 from sklearn.metrics import mean_absolute_error
-import pandas as pd
 from sklearn.model_selection import GridSearchCV
-from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import RBF
-from sklearn.tree import DecisionTreeRegressor
+
+import pandas as pd
 import numpy as np
-from sklearn.ensemble import RandomForestRegressor
 import time
 import datetime
 from rdkit import Chem
@@ -85,8 +87,8 @@ def smiles_to_fingerprints(data_set, last_column):
 
 def main():
     """
-    Calls all four regression models, calls the calculate_stats function to return the r2, mse, mae,
-    and r pearson values, prints a final dataframe with a compatilation of stats from all four 
+    Calls all four regression models, calls the calculate_stats function to return the R2, MSE, MAE,
+    and R Pearson values, prints a final dataframe with a compatilation of stats from all four 
     models, prints the times when the program begins and ends.
 
     Returns
@@ -98,12 +100,13 @@ def main():
     This main function begins by transforming the SMILES input to fingerprints that the program can process
     """
     
-    #### 1. read in csv file using pandas- path goes in parentheses
+    #read in csv file using pandas- path goes in parentheses
     data_set = input("Input the name of the csv file you would like to use: ")
     last_column = input("Input the name of the column with the expected/final data as it appears in the spreadsheet: ")
     
     X_data, y_data = smiles_to_fingerprints(data_set, last_column)
-    
+
+    #run the program as it ran in the fingerprint version with the newly converted SMILES (to fingerprint) strings
     current_time = datetime.datetime.now()
     formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
     print(f"This program was started at {formatted_time}")
@@ -155,8 +158,8 @@ def main():
 def calculate_stats(y_test, y_pred):
     """
     Function to calculate general statistics that can be applied to each specific model
-    Notes: r2, mse, and mae calculated through sklearn module
-    r pearson correlation coefficient calculated through numpy module
+    Notes: R2, MSE, and MAE calculated through sklearn module
+    R Pearson correlation coefficient calculated through numpy module
 
     Parameters
     ----------
@@ -182,11 +185,11 @@ def calculate_stats(y_test, y_pred):
 #random state values are set to 42, unless optimized using GridSearchCV
 def linear_regression(X, y):
     """
-    Implements a linear regression model on the inputted data
+    Implements a Linear Regression model on the inputted data
 
     Returns
     -------
-    stats : a list of four statistics (r2 value, mse value, mae value, and r pearson correlation 
+    calculate_stats(y_test, y_pred) : a list of four statistics (R2 value, MSE value, MAE value, and R Pearson correlation 
     coefficient value to the main function to be included in the final dataframe)
 
     """
@@ -196,7 +199,8 @@ def linear_regression(X, y):
     model = LinearRegression()
     model.fit(X_train, y_train)
     y_pred = model.predict(X_test)
-    
+
+    #Graph the performance of the Linear model
     plt.scatter(y_test, y_pred, color = "#c91a46", alpha = 0.4)
     plt.plot([min(y), max(y)], [min(y), max(y)], "k--")
     plt.xlabel("True Y Value")
@@ -218,12 +222,12 @@ def linear_regression(X, y):
 
 def gaussian_regression(X, y):
     """
-    Implements a gaussian regression model with the inputted data
+    Implements a Gaussian Regression model with the inputted data
 
     Returns
     -------
-    stats1 : returns same list as linear regression, except with the values achieved by the 
-    gaussian model
+    calculate_stats(y_test, y_pred) : returns same list as Linear regression, except with the values achieved by the 
+    Gaussian model
 
     """
     start_time = time.time()
@@ -249,7 +253,8 @@ def gaussian_regression(X, y):
     gp.fit(X_train, y_train)  
 
     y_pred, std = gp.predict(X_test, return_std = True) 
-    
+
+    #Graph the performance of the Gaussian model
     plt.scatter(y_test, y_pred, color = "#32a852", alpha = 0.4)
     plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], "k--")
     plt.xlabel("True Y Value")
@@ -270,11 +275,11 @@ def gaussian_regression(X, y):
 
 def decision_tree_regression(X, y):
     """
-    Implements a decision tree regression model with the inputted data
+    Implements a Decision Tree regression model with the inputted data
 
     Returns
     -------
-    stats2 : list of statistics specific to the decision tree model's performance
+    calculate_stats(y_test, y_pred) : list of statistics specific to the Decision Tree model's performance
 
     """
     
@@ -297,7 +302,8 @@ def decision_tree_regression(X, y):
     
     #Using the optimized model, predict values from the X test set
     y_pred=tree1_search.best_estimator_.predict(X_test)
-    
+
+    #Graph the performance of the Decision Tree model
     plt.scatter(y_test, y_pred, color = "#fc9403", alpha = 0.4)
     plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], "k--")
     plt.xlabel("True Y value")
@@ -318,11 +324,11 @@ def decision_tree_regression(X, y):
 
 def random_forest_regression(X, y):
     """
-    Implements a random forest regression model with the inputted data
+    Implements a Random Forest regression model with the inputted data
 
     Returns
     -------
-    stats3 : list of statistics specific to the random forest model's performance
+    calculate_stats(y_test, y_pred) : list of statistics specific to the Random Forest model's performance
 
     """
     
@@ -351,7 +357,8 @@ def random_forest_regression(X, y):
     
     #Predict test set data with optimized paramaters
     y_pred = forest.predict(X_test) 
-    
+
+    #Graph the performance of the Random Forest model
     plt.scatter(y_test, y_pred, color = "#4287f5", alpha = 0.4)
     plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], "k--")
     plt.xlabel("True Y Value")
