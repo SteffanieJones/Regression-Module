@@ -1,15 +1,30 @@
+#################################### Regression Module Information###################################
+#takes an input of an amino acid data set, must be a TXT file (two inputs in dataset: amino acid sequence and expected output)
+
+#Returns General Statistics About Four Regression techniques:
+    #Linear Regression
+    #Gaussian Regression
+    #Decision Tree
+    #Random Forest Regression
+#Optimizes models using GridSearchCV function (sklearn module)
+#focuses on R2, MSE, MAE, and R Pearson Correlation Coefficient values as outputs (to compare to other models)
+#Current run time: ~30 minutes for a 3400 row data set
+####################################################################################################
+
 from sklearn.linear_model import LinearRegression
+from sklearn.gaussian_process import GaussianProcessRegressor
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor
+
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 from sklearn.metrics import r2_score
 from sklearn.metrics import mean_absolute_error
-import pandas as pd
 from sklearn.model_selection import GridSearchCV
-from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import RBF
-from sklearn.tree import DecisionTreeRegressor
+
+import pandas as pd
 import numpy as np
-from sklearn.ensemble import RandomForestRegressor
 import time
 import datetime
 import matplotlib.pyplot as plt
@@ -79,7 +94,6 @@ def main():
     None.
 
     """
-        
     #Get user input to direct the program
     data_set = input("Input the name of the txt file you would like to use: ")    
     column_name = input("Input the name of the column with the amino acid sequences as it appears in the spreadsheet: ")
@@ -110,8 +124,6 @@ def main():
     
     #separate the two columns and use for rest of program
     X_data = df
-    #print(X_data.iloc[12])
-    #print(X_data.iloc[520])     #Row 522, is two numbers lower because the index starts at 0 and the "sequence" title at the top is deleted
     y_data = y
 
     current_time = datetime.datetime.now()
@@ -165,8 +177,8 @@ def main():
 def calculate_stats(y_test, y_pred):
     """
     Function to calculate general statistics that can be applied to each specific model
-    Notes: r2, mse, and mae calculated through sklearn module
-    r pearson correlation coefficient calculated through numpy module
+    Notes: R2, MSE, and MAE calculated through sklearn module
+    R Pearson correlation coefficient calculated through numpy module
 
     Parameters
     ----------
@@ -175,7 +187,7 @@ def calculate_stats(y_test, y_pred):
 
     Returns
     -------
-    stats : list of r2, mse, mae, and r pearson correlation coefficient values for each specific regression model the function is used for
+    stats : list of R2, MSE, MAE, and R Pearson correlation coefficient values for each specific regression model the function is used for
 
     """
     r2 = r2_score(y_test, y_pred)
@@ -192,11 +204,11 @@ def calculate_stats(y_test, y_pred):
 #random state values are set to 42, unless optimized using GridSearchCV
 def linear_regression(X, y):
     """
-    Implements a linear regression model on the inputted data
+    Implements a Linear Regression model on the inputted data
 
     Returns
     -------
-    stats : a list of four statistics (r2 value, mse value, mae value, and r pearson correlation 
+    calculate_stats(y_test, y_pred) : a list of four statistics (r2 value, mse value, mae value, and r pearson correlation 
     coefficient value to the main function to be included in the final dataframe)
 
     """
@@ -206,7 +218,8 @@ def linear_regression(X, y):
     model = LinearRegression()
     model.fit(X_train, y_train)
     y_pred = model.predict(X_test)
-    
+
+    #Graph Linear model's performance
     plt.figure(dpi=1000)
     plt.plot(y_test,y_pred,'o',alpha=0.4, color = "#c91a46") # plot the prediction
     plt.xlabel('True Y Value', fontsize=12)
@@ -229,12 +242,12 @@ def linear_regression(X, y):
 
 def gaussian_regression(X, y):
     """
-    Implements a gaussian regression model with the inputted data
+    Implements a Gaussian Regression model with the inputted data
 
     Returns
     -------
-    stats1 : returns same list as linear regression, except with the values achieved by the 
-    gaussian model
+    calculate_stats(y_test, y_pred) : returns same list as Linear regression, except with the values achieved by the 
+    Gaussian model
 
     """
     start_time = time.time()
@@ -264,7 +277,8 @@ def gaussian_regression(X, y):
     print("Gaussian model fitted")
     #predict Lipophilicity values with the test data set to assess Gaussian Model
     y_pred, std = gp.predict(X_test, return_std = True) 
-    
+
+    #Graph Gaussian model's performance
     plt.figure(dpi=1000)
     plt.plot(y_test,y_pred,'o',alpha=0.4, color = "#32a852") # plot the prediction
     plt.xlabel('True Y Value', fontsize=12)
@@ -286,11 +300,11 @@ def gaussian_regression(X, y):
 
 def decision_tree_regression(X, y):
     """
-    Implements a decision tree regression model with the inputted data
+    Implements a Decision Tree regression model with the inputted data
 
     Returns
     -------
-    stats2 : list of statistics specific to the decision tree model's performance
+    calculate_stats(y_test, y_pred) : list of statistics specific to the decision tree model's performance
 
     """
     
@@ -313,7 +327,8 @@ def decision_tree_regression(X, y):
     
     #Using the optimized model, predict values from the X test set
     y_pred=tree1_search.best_estimator_.predict(X_test)
-    
+
+    #Graph Decision Tree model's performance
     plt.figure(dpi=1000)
     plt.plot(y_test,y_pred,'o',alpha=0.4, color = "#fc9403") # plot the prediction
     plt.xlabel('True Y Value', fontsize=12)
@@ -335,11 +350,11 @@ def decision_tree_regression(X, y):
 
 def random_forest_regression(X, y):
     """
-    Implements a random forest regression model with the inputted data
+    Implements a Random Forest regression model with the inputted data
 
     Returns
     -------
-    stats3 : list of statistics specific to the random forest model's performance
+    calculate_stats(y_test, y_pred): list of statistics specific to the random forest model's performance
 
     """
     
@@ -368,7 +383,8 @@ def random_forest_regression(X, y):
     
     #Predict test set data with optimized paramaters
     y_pred = forest.predict(X_test) 
-    
+
+    #Graph Random Forest model's performance
     plt.figure(dpi=1000)
     plt.plot(y_test,y_pred,'o',alpha=0.4, color = "#4287f5") # plot the prediction
     plt.xlabel('True Y Value', fontsize=12)
@@ -378,7 +394,6 @@ def random_forest_regression(X, y):
     plt.show()
     
     end_time = time.time()
-    
     total_time = end_time - start_time
     total_minutes = round((total_time/60), 3)
     print(f"Random Forest model took {total_minutes} minutes to run.")
