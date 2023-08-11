@@ -3,7 +3,7 @@ Created on Tue Jul 11 10:05:38 2023
 @author: Steffanie Jones
 """
 #################################### Regression Module Information###################################
-#takes an input of a FINGERPRINT data set, must be a csv file
+#takes an input of a FINGERPRINT data set, must be a csv file with two groups(fingerprint and expected output)
 #NOTE: These regression modules are not optimized, resulting in a code that will run more quickly but could also produce less accurate results
 
 #Returns General Statistics About Four Regression techniques:
@@ -11,21 +11,22 @@ Created on Tue Jul 11 10:05:38 2023
     #Gaussian Regression
     #Decision Tree
     #Random Forest Regression
-#Optimizes models using GridSearchCV function (sklearn module)
 #focuses on R2, MSE, MAE, and R Pearson Correlation Coefficient values as outputs (to compare to other models)
 #Current run time: ~15 minutes for a 4200 row data set
 ####################################################################################################
 from sklearn.linear_model import LinearRegression
+from sklearn.gaussian_process import GaussianProcessRegressor
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor
+
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 from sklearn.metrics import r2_score
 from sklearn.metrics import mean_absolute_error
-import pandas as pd
-from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import RBF
-from sklearn.tree import DecisionTreeRegressor
+
+import pandas as pd
 import numpy as np
-from sklearn.ensemble import RandomForestRegressor
 import time
 import datetime
 
@@ -134,7 +135,7 @@ def linear_regression(X, y):
     Returns
     -------
     stats : a list of four statistics (r2 value, mse value, mae value, and r pearson correlation 
-    coefficient value to the main function to be included in the final dataframe)
+    coefficient value) to the main function to be included in the final dataframe
 
     """
     start_time = time.time()
@@ -169,16 +170,14 @@ def gaussian_regression(X, y):
     start_time = time.time()
     
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
-    print("Test train split completed.")
     
     kernel = RBF(length_scale = 1.0) 
     
-    #Create final optimized Gaussian Process model based on the GridSearchCV results
+    #Create final Gaussian Process model 
     gp = GaussianProcessRegressor(kernel = kernel, n_restarts_optimizer=10, random_state=42)
-    print("Gaussian model created")
     
     gp.fit(X_train, y_train)  
-    print("Gaussian model fitted")
+
     #predict Lipophilicity values with the test data set to assess Gaussian Model
     y_pred, std = gp.predict(X_test, return_std=True) 
     
@@ -208,11 +207,10 @@ def decision_tree_regression(X, y):
     #Split the data into a training set and a test set
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
     
-
     tree1 = DecisionTreeRegressor()
     tree1.fit(X_train,y_train)
     
-    #Using the optimized model, predict values from the X test set
+    #Predict values from the X test set
     y_pred=tree1.predict(X_test)
     
     end_time = time.time()
@@ -228,12 +226,11 @@ def decision_tree_regression(X, y):
 
 def random_forest_regression(X, y):
     """
-    Implements a random forest regression model with the inputted data
+    Implements a Random Forest regression model with the inputted data
 
     Returns
     -------
-    stats3 : list of statistics specific to the random forest model's performance
-
+    stats3 : list of statistics specific to the Random Forest model's performance
     """
     
     start_time = time.time()
@@ -241,11 +238,11 @@ def random_forest_regression(X, y):
     #Split the data into a training set and a test set
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 5)
     
-    #Code the final Random Forest model with the optimized paramaters from the GridSearchCV function
+    #Code the final Random Forest model without optimized parameters
     forest = RandomForestRegressor(n_estimators = 500, min_samples_leaf = 1, random_state = 5)
     forest.fit(X_train, y_train)
 
-    #Predict test set data with optimized paramaters
+    #Predict test set data 
     y_pred = forest.predict(X_test) 
     
     end_time = time.time()
