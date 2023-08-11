@@ -178,7 +178,7 @@ def gaussian_regression(X, y):
     
     gp.fit(X_train, y_train)  
 
-    #predict Lipophilicity values with the test data set to assess Gaussian Model
+    #predict values with the test data set to assess Gaussian Model
     y_pred, std = gp.predict(X_test, return_std=True) 
     
     end_time = time.time()
