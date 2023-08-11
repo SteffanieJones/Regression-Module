@@ -191,7 +191,7 @@ def graph_results(y_test, y_pred, graph_title, graph_color):
     None.
 
     """
-    if graph_option == "y" or "yes":
+    if graph_option.strip() in ["y", "yes", "Y", "yeah", "si"]:
         plt.figure(dpi=1000)
         plt.plot(y_test,y_pred,'o',alpha=0.4, color = graph_color) # plot the prediction
         plt.xlabel('True Y Value', fontsize=12)
