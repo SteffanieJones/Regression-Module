@@ -63,7 +63,3 @@ This version outputs the same statistics but also outputs graphs of each regress
 Steffanie Jones
 
 djy6ge@virginia.edu
-
-joness24@ucfsd.net
-
-484-719-8805
