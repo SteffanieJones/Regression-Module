@@ -6,7 +6,7 @@ Created on Tue Jul 11 10:05:38 2023
 """
 #################################### Regression Module Information ###################################
 #takes an input of a fingerprint, SMILES (small molecule), or amino acid sequence (peptide) data set
-#must be a csv file with two columns (data and expected output)
+#must be a CSV file with two columns (data and expected output)
 
 #Returns General Statistics About Four Regression techniques:
     #Linear Regression
