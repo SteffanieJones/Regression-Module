@@ -139,7 +139,7 @@ def linear_regression(X, y):
 
     Returns
     -------
-    stats : a list of four statistics (R2 value, MSE value, MAE value, and R Pearson correlation 
+    calculate_stats(y_test, y_pred) : a list of four statistics (R2 value, MSE value, MAE value, and R Pearson correlation 
     coefficient value to the main function to be included in the final dataframe)
 
     """
@@ -176,7 +176,7 @@ def gaussian_regression(X, y):
 
     Returns
     -------
-    stats1 : returns same list as Linear regression, except with the values achieved by the 
+    calculate_stats(y_test, y_pred) : returns same list as Linear regression, except with the values achieved by the 
     Gaussian model
 
     """
@@ -233,7 +233,7 @@ def decision_tree_regression(X, y):
 
     Returns
     -------
-    stats2 : list of statistics specific to the Decision Tree model's performance
+    calculate_stats(y_test, y_pred) : list of statistics specific to the Decision Tree model's performance
 
     """
     
@@ -282,7 +282,7 @@ def random_forest_regression(X, y):
 
     Returns
     -------
-    stats3 : list of statistics specific to the Random Forest model's performance
+    calculate_stats(y_test, y_pred) : list of statistics specific to the Random Forest model's performance
 
     """
     
